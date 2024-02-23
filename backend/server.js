@@ -1,10 +1,9 @@
-const express = require('express');
+import express from "express";
+import initWebRoutes from "./router/web.js";
 const app = express();
-const port = 5001;
+const port = 6969;
 
-app.get('/', (req, res) => {
-    res.send('Hello from Express!');
-});
+initWebRoutes(app);
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
