@@ -4,5 +4,5 @@ const adminControllers = require("../controllers/adminControllers");
 router.get('/', (req, res) => { res.send("HEllo") })
 router.get('/api/login', adminControllers.handleUserLogin);
 router.get('api/register', adminControllers.handleUserRegister);
-router.get('/api/s', adminControllers.showTable);
+router.get('/api/s', adminControllers.showValue);
 module.exports = router;
