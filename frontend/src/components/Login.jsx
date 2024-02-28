@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import './Login.scss'; // Import SCSS file for styling
+import { Link } from 'react-router-dom';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -64,7 +65,9 @@ const Login = () => {
                 </form>
                 <hr />
                 <div className="register-link">
-                    <p>Don't have an account? <a href="/register">Register</a></p>
+                    <p>Don't have an account?
+                        <Link to='/register'>Register</Link>
+                    </p>
                 </div>
                 <div className="social-login">
                     <div className='social-login-item' onClick={handleGoogleLogin}>

@@ -27,7 +27,7 @@ const db = new Sequelize(DB_DATABASE, DB_USER, null, {
     },
     define: {
         timestamps: false
-    }
+    },
 });
 
 async function listTables() {

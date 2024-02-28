@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './container/App';
-import { Login, About, Home } from "./components/index";
+import { Login, About, Home, Register } from "./components/index";
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -15,6 +15,7 @@ root.render(
         <Route path='/' element={<App />}>
           <Route path='login' element={<Login />} />
           <Route path='about' element={<About />} />
+          <Route path='register' element={<Register />} />
           <Route index element={<Home />} />
         </Route>
       </Routes>
