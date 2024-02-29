@@ -3,15 +3,26 @@
 import React, { useState } from 'react';
 import './Login.scss'; // Import SCSS file for styling
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
-
-    const handleLogin = (e) => {
+    const [isWrong, setIsWrong] = useState(false);
+    const handleLogin = async (e) => {
         e.preventDefault();
         // Add your login logic here, e.g., calling an API to authenticate the user
-        console.log(`Logging in with username: ${username}, password: ${password}, and rememberMe: ${rememberMe}`);
+        const response = await axios.post("http://localhost:6969/api/login", {
+            username: username,
+            password: password,
+        })
+        if (response.data.errCode === 200 && response.data.message === 'find one') {
+            setIsWrong(false);
+        }
+        else {
+            console.log('helo');
+            setIsWrong(true);
+        }
     };
 
     const handleRememberMe = () => {
@@ -58,6 +69,7 @@ const Login = () => {
                             />
                             <span className='remember-password'>Remember Password</span>
                         </label>
+                        {isWrong ? <div className='login-err-noti'>Wrong username or password</div> : null}
                     </div>
                     <div className="form-group">
                         <button type="submit">Login</button>
