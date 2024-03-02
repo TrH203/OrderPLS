@@ -1,14 +1,18 @@
 // Login.js
-
 import React, { useState } from 'react';
 import './Login.scss'; // Import SCSS file for styling
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-const Login = () => {
+import { connect } from "react-redux";
+import { useSignIn } from "react-auth-kit";
+import * as actions from "../store/action/action";
+const Login = props => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [rememberMe, setRememberMe] = useState(false);
     const [isWrong, setIsWrong] = useState(false);
+    const nav = useNavigate();
+    const signIn = useSignIn();
     const handleLogin = async (e) => {
         e.preventDefault();
         // Add your login logic here, e.g., calling an API to authenticate the user
@@ -18,9 +22,19 @@ const Login = () => {
         })
         if (response.data.errCode === 200 && response.data.message === 'find one') {
             setIsWrong(false);
+            props.changeLoginState();
+            nav('/workspace');
+            // console.log("Login state when login:", props.isLogin);
+            signIn({
+                token: response.data.token,
+                expiresIn: 3600,
+                tokenType: "Bearer",
+                authState: { username: username }
+            });
+            console.log('SignIn successful');
         }
         else {
-            console.log('helo');
+            console.log('the respone is not ok');
             setIsWrong(true);
         }
     };
@@ -95,5 +109,16 @@ const Login = () => {
         </div>
     );
 };
+const mapStateToProps = state => {
+    return {
+        isLogin: state.isLogin,
+    };
+}
 
-export default Login;
+const mapDispatchToProps = dispatch => {
+    return {
+        changeLoginState: async () => dispatch(actions.processLogin()),
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
+// export default Login;

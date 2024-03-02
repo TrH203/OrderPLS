@@ -1,7 +1,16 @@
 import React from 'react'
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { Link, NavLink } from 'react-router-dom';
-function Header() {
+import { Container, Nav, Navbar } from 'react-bootstrap';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { connect } from "react-redux";
+import * as actions from "../store/action/action";
+function Header(props) {
+    const nav = useNavigate();
+    const handleLogout = async () => {
+        await props.processLogout();
+        nav('/');
+        window.location.reload();
+
+    }
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
             <Container >
@@ -9,25 +18,19 @@ function Header() {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <NavLink to="/" className='nav-link'>Home</NavLink>
+                        {props.isLogin ?
+                            <NavLink to="/workspace" className='nav-link'>Your WorkSpace</NavLink> :
+                            <NavLink to="/" className='nav-link'>Home</NavLink>
+                        }
                         <NavLink to="/about" className='nav-link'>About</NavLink>
-                        <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">
-                                Another action
-                            </NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.4">
-                                Separated link
-                            </NavDropdown.Item>
-                        </NavDropdown>
                     </Nav>
                     <Nav>
-                        <Link className='nav-link' to="/login">Login</Link>
+                        {props.isLogin ?
+                            <div className='nav-link' style={{ cursor: 'pointer' }} onClick={(event) => { handleLogout() }}>Log Out</div> :
+                            <Link className='nav-link' to="/login">Login</Link>
+                        }
                     </Nav>
-                    <Nav>
-                    </Nav>
+
                 </Navbar.Collapse>
 
             </Container>
@@ -35,4 +38,16 @@ function Header() {
     );
 }
 
-export default Header;
+const mapStateToProps = state => {
+    return {
+        isLogin: state.isLogin,
+    };
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        processLogout: async () => dispatch(actions.processLogout()),
+    };
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
+// export default Header;

@@ -3,12 +3,15 @@ const db = require("../models/database");
 // const Test = require("../models/test");
 // const Demo = require("../models/demo");
 const Users = require("../models/users");
+const jwt = require("jsonwebtoken");
+const secretKey = process.env.SECRET;
 const handleUserLogin = async (req, res) => {
     try {
         const value = req.body;
         const rs = await Users.findOne({ where: { username: value.username, password: value.password } });
         if (rs) {
-            return res.status(200).send({ errCode: 200, message: "find one" });
+            const token = jwt.sign({ username: value.username, password: value.password }, secretKey, { expiresIn: '1h' });
+            return res.status(200).send({ errCode: 200, message: "find one", token: token });
         } else {
             return res.status(200).send({ errCode: 304, message: "not found" });
         }
