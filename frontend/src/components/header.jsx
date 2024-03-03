@@ -3,13 +3,16 @@ import { Container, Nav, Navbar } from 'react-bootstrap';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { connect } from "react-redux";
 import * as actions from "../store/action/action";
+import { useSignOut } from 'react-auth-kit';
+import { Logout } from "./index";
 function Header(props) {
     const nav = useNavigate();
+    const signOut = useSignOut();
     const handleLogout = async () => {
-        await props.processLogout();
-        nav('/');
-        window.location.reload();
-
+        //await props.processLogout();
+        // nav('/');
+        // window.location.reload();
+        signOut();
     }
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
@@ -26,7 +29,7 @@ function Header(props) {
                     </Nav>
                     <Nav>
                         {props.isLogin ?
-                            <div className='nav-link' style={{ cursor: 'pointer' }} onClick={(event) => { handleLogout() }}>Log Out</div> :
+                            <Logout /> :
                             <Link className='nav-link' to="/login">Login</Link>
                         }
                     </Nav>
@@ -46,7 +49,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        processLogout: async () => dispatch(actions.processLogout()),
+
     };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
